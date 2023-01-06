@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"testing"
@@ -111,6 +113,61 @@ func TestGetProduct(t *testing.T) {
 				So(actualResult.Amount, ShouldEqual, stock.Amount)
 				So(actualResult.CreatedAt, ShouldEqual, stock.CreatedAt)
 				So(actualResult.UpdatedAt, ShouldEqual, stock.UpdatedAt)
+			})
+		})
+	})
+}
+
+func TestUpdateProduct(t *testing.T) {
+	Convey("Update stock", t, func() {
+
+		repository := GetCleanTestRepository()
+		service := NewService(repository)
+		api := NewApi(&service)
+
+		stock := models.Product{
+			ID:          GenerateUUID(8),
+			ProductName: "product",
+			Amount:      100,
+			CreatedAt:   time.Now().UTC().Round(time.Second),
+			UpdatedAt:   time.Now().UTC().Round(time.Second),
+		}
+
+		repository.CreateProduct(stock)
+
+		Convey("When the put request sent", func() {
+			app := SetupApp(&api)
+
+			stock2 := models.ProductDTO{
+				ProductName: "newProduct",
+				Amount:      80,
+				CreatedAt:   time.Now().UTC().Round(time.Second),
+			}
+			reqBody, err := json.Marshal(stock2)
+
+			So(err, ShouldBeNil)
+			req, _ := http.NewRequest(http.MethodPut, "/stock/"+stock.ID, bytes.NewReader(reqBody))
+			req.Header.Add("Content-Type", "application/json")
+
+			resp, err := app.Test(req, 3000)
+
+			So(err, ShouldBeNil)
+
+			Convey("then status should be 200", func() {
+				So(resp.StatusCode, ShouldEqual, fiber.StatusOK)
+			})
+
+			Convey("Then product stock should be updated", func() {
+				actualResult := models.Product{}
+				actualRespBody, _ := ioutil.ReadAll(resp.Body)
+				err = json.Unmarshal(actualRespBody, &actualResult)
+				fmt.Println(actualResult, "bababab")
+				So(err, ShouldBeNil)
+				So(actualResult.ID, ShouldEqual, stock.ID)
+				So(actualResult.ProductName, ShouldEqual, stock2.ProductName)
+				So(actualResult.Amount, ShouldEqual, stock2.Amount)
+				So(actualResult.CreatedAt, ShouldEqual, stock2.CreatedAt)
+
 			})
 		})
 	})

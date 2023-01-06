@@ -95,8 +95,22 @@ func (repository *Repository) GetStock(ID string) (models.Product, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	return stock, nil
+}
+
+func (repository *Repository) UpdateStocks(stock models.Product, ID string) error {
+	collection := repository.client.Database("stock").Collection("stock")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	result := collection.FindOneAndReplace(ctx, bson.M{"id": ID}, stock)
+
+	if result == nil {
+		return result.Err()
+	}
+
+	return nil
+
 }
 
 func GetCleanTestRepository() *Repository {
