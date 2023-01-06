@@ -58,7 +58,7 @@ func NewTestRepository() *Repository {
 	return &Repository{client}
 }
 
-func (repository *Repository) GetStock() ([]models.Product, error) {
+func (repository *Repository) GetStocks() ([]models.Product, error) {
 	collection := repository.client.Database("stock").Collection("stock")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -82,6 +82,21 @@ func (repository *Repository) GetStock() ([]models.Product, error) {
 
 	return stocks, nil
 
+}
+
+func (repository *Repository) GetStock(ID string) (models.Product, error) {
+	collection := repository.client.Database("stock").Collection("stock")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	stock := models.Product{}
+	err := collection.FindOne(ctx, bson.M{}).Decode(&stock)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return stock, nil
 }
 
 func GetCleanTestRepository() *Repository {

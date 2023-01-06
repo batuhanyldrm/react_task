@@ -12,7 +12,7 @@ import (
 	. "github.com/smartystreets/goconvey/convey"
 )
 
-func TestGetProduct(t *testing.T) {
+func TestGetProducts(t *testing.T) {
 	Convey("Get Stocks", t, func() {
 		repository := GetCleanTestRepository()
 		service := NewService(repository)
@@ -39,7 +39,7 @@ func TestGetProduct(t *testing.T) {
 
 		Convey("When the get reguest sent", func() {
 			app := SetupApp(&api)
-			req, _ := http.NewRequest(http.MethodGet, "/stock", nil)
+			req, _ := http.NewRequest(http.MethodGet, "/stocks", nil)
 
 			resp, err := app.Test(req)
 			So(err, ShouldBeNil)
@@ -66,6 +66,51 @@ func TestGetProduct(t *testing.T) {
 				So(actualResult[1].Amount, ShouldEqual, stock2.Amount)
 				So(actualResult[1].CreatedAt, ShouldEqual, stock2.CreatedAt)
 				So(actualResult[1].UpdatedAt, ShouldEqual, stock2.UpdatedAt)
+			})
+		})
+	})
+}
+
+func TestGetProduct(t *testing.T) {
+	Convey("Get stock", t, func() {
+
+		repository := GetCleanTestRepository()
+		service := NewService(repository)
+		api := NewApi(&service)
+
+		stock := models.Product{
+			ID:          GenerateUUID(8),
+			ProductName: "Sweater",
+			Amount:      5,
+			CreatedAt:   time.Now().UTC().Round(time.Second),
+			UpdatedAt:   time.Now().UTC().Round(time.Second),
+		}
+
+		repository.CreateProduct(stock)
+
+		Convey("When the get request sent", func() {
+			app := SetupApp(&api)
+			req, _ := http.NewRequest(http.MethodGet, "/stocks/"+stock.ID, nil)
+			resp, err := app.Test(req, 3000)
+
+			So(err, ShouldBeNil)
+
+			Convey("Then status code should be 200", func() {
+				So(resp.StatusCode, ShouldEqual, fiber.StatusOK)
+			})
+
+			Convey("Then product should be returned", func() {
+				actualResult := models.Product{}
+				actualRespBody, _ := ioutil.ReadAll(resp.Body)
+				err := json.Unmarshal(actualRespBody, &actualResult)
+
+				So(err, ShouldBeNil)
+
+				So(actualResult.ID, ShouldEqual, stock.ID)
+				So(actualResult.ProductName, ShouldEqual, stock.ProductName)
+				So(actualResult.Amount, ShouldEqual, stock.Amount)
+				So(actualResult.CreatedAt, ShouldEqual, stock.CreatedAt)
+				So(actualResult.UpdatedAt, ShouldEqual, stock.UpdatedAt)
 			})
 		})
 	})

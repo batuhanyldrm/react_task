@@ -20,7 +20,8 @@ func SetupApp(api *Api) *fiber.App {
 		AllowCredentials: true,
 	}))
 
-	app.Get("/stock", api.GetStockHandler)
+	app.Get("/stocks", api.GetStocksHandler)
+	app.Get("/stocks/:id", api.GetStockHandler)
 
 	return app
 }

@@ -17,12 +17,23 @@ func NewService(Repository *Repository) Service {
 	}
 }
 
-func (service *Service) GetStock() ([]models.Product, error) {
+func (service *Service) GetStocks() ([]models.Product, error) {
 
-	stock, err := service.Repository.GetStock()
+	stocks, err := service.Repository.GetStocks()
 
 	if err != nil {
 		return nil, err
+	}
+
+	return stocks, nil
+}
+
+func (service *Service) GetStock(ID string) (models.Product, error) {
+
+	stock, err := service.Repository.GetStock(ID)
+
+	if err != nil {
+		return models.Product{}, nil
 	}
 
 	return stock, nil
