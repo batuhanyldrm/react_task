@@ -3,6 +3,7 @@ package main
 import (
 	"strings"
 
+	"example.com/greetings/models"
 	"github.com/google/uuid"
 )
 
@@ -14,6 +15,17 @@ func NewService(Repository *Repository) Service {
 	return Service{
 		Repository: Repository,
 	}
+}
+
+func (service *Service) GetStock() ([]models.Product, error) {
+
+	stock, err := service.Repository.GetStock()
+
+	if err != nil {
+		return nil, err
+	}
+
+	return stock, nil
 }
 
 func GenerateUUID(length int) string {
