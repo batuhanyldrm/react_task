@@ -128,6 +128,21 @@ func (repository *Repository) PostStocks(product models.Product) error {
 
 }
 
+func (repository *Repository) DeleteStocks(stockId string) error {
+	collection := repository.client.Database("stock").Collection("stock")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	filter := bson.M{"id": stockId}
+
+	_, err := collection.DeleteOne(ctx, filter)
+	if err != nil {
+		return err
+	}
+
+	return nil
+
+}
+
 func GetCleanTestRepository() *Repository {
 
 	repository := NewRepository()

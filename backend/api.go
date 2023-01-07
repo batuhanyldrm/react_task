@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"example.com/greetings/models"
 	"github.com/gofiber/fiber/v2"
 )
@@ -59,7 +57,7 @@ func (api *Api) UpdateStocksHandler(c *fiber.Ctx) error {
 	}
 
 	updatedStock, err := api.Service.UpdateStocks(stock, ID)
-	fmt.Println(updatedStock, "wwwwwwww")
+
 	switch err {
 	case nil:
 		c.JSON(updatedStock)
@@ -84,6 +82,22 @@ func (api *Api) PostStocksHandler(c *fiber.Ctx) error {
 	case nil:
 		c.JSON(stock)
 		c.Status(fiber.StatusCreated)
+
+	default:
+		c.Status(fiber.StatusInternalServerError)
+	}
+
+	return nil
+}
+
+func (api *Api) DeleteStocksHandler(c *fiber.Ctx) error {
+
+	ID := c.Params("id")
+	err := api.Service.DeleteStocks(ID)
+
+	switch err {
+	case nil:
+		c.Status(fiber.StatusNoContent)
 
 	default:
 		c.Status(fiber.StatusInternalServerError)

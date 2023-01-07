@@ -73,13 +73,23 @@ func (service *Service) PostStocks(productDTO models.ProductDTO) *models.Product
 	stock.Price = productDTO.Price
 	stock.Amount = productDTO.Amount
 
-
 	err := service.Repository.PostStocks(stock)
 	if err != nil {
 		return nil
 	}
 
 	return &stock
+}
+
+func (service *Service) DeleteStocks(stockId string) error {
+
+	err := service.Repository.DeleteStocks(stockId)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func GenerateUUID(length int) string {

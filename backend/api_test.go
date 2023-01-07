@@ -234,3 +234,40 @@ func TestAddProduct(t *testing.T) {
 		})
 	})
 }
+func TestDeleteProduct(t *testing.T) {
+	Convey("Delete stock that user wants", t, func() {
+
+		repository := GetCleanTestRepository()
+		service := NewService(repository)
+		api := NewApi(&service)
+
+		stock := models.Product{
+			ID:          GenerateUUID(8),
+			ProductName: "Product",
+			Description: "kfbgkfjgb",
+			Price:       709,
+			Amount:      250,
+			CreatedAt:   time.Now().UTC().Round(time.Second),
+			UpdatedAt:   time.Now().UTC().Round(time.Second),
+		}
+		repository.CreateProduct(stock)
+
+		Convey("When the delete request sent", func() {
+			app := SetupApp(&api)
+
+			req, _ := http.NewRequest(http.MethodDelete, "/stocks/"+stock.ID, nil)
+			resp, err := app.Test(req, 30000)
+			So(err, ShouldBeNil)
+
+			Convey("Then status code should be 204", func() {
+				So(resp.StatusCode, ShouldEqual, fiber.StatusNoContent)
+			})
+
+			Convey("Then stock should be deleted", func() {
+				stock, _ := repository.GetStocks()
+				So(stock, ShouldHaveLength, 0)
+				So(stock, ShouldResemble, []models.Product{})
+			})
+		})
+	})
+}
