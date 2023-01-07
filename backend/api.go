@@ -62,9 +62,29 @@ func (api *Api) UpdateStocksHandler(c *fiber.Ctx) error {
 	fmt.Println(updatedStock, "wwwwwwww")
 	switch err {
 	case nil:
-		//response
 		c.JSON(updatedStock)
 		c.Status(fiber.StatusOK)
+	default:
+		c.Status(fiber.StatusInternalServerError)
+	}
+
+	return nil
+}
+
+func (api *Api) PostStocksHandler(c *fiber.Ctx) error {
+
+	createStocks := models.ProductDTO{}
+	err := c.BodyParser(&createStocks)
+	if err != nil {
+		c.Status(fiber.StatusBadRequest)
+	}
+	stock := api.Service.PostStocks(createStocks)
+
+	switch err {
+	case nil:
+		c.JSON(stock)
+		c.Status(fiber.StatusCreated)
+
 	default:
 		c.Status(fiber.StatusInternalServerError)
 	}

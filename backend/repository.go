@@ -113,6 +113,21 @@ func (repository *Repository) UpdateStocks(stock models.Product, ID string) erro
 
 }
 
+func (repository *Repository) PostStocks(product models.Product) error {
+	collection := repository.client.Database("stock").Collection("stock")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	_, err := collection.InsertOne(ctx, product)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+
+}
+
 func GetCleanTestRepository() *Repository {
 
 	repository := NewRepository()

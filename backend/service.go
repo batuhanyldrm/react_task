@@ -48,6 +48,8 @@ func (service *Service) UpdateStocks(productDTO models.ProductDTO, ID string) (*
 	}
 
 	stock.ProductName = productDTO.ProductName
+	stock.Description = productDTO.Description
+	stock.Price = productDTO.Price
 	stock.Amount = productDTO.Amount
 	stock.UpdatedAt = time.Now().UTC().Round(time.Second)
 
@@ -58,6 +60,26 @@ func (service *Service) UpdateStocks(productDTO models.ProductDTO, ID string) (*
 	}
 
 	return &stock, nil
+}
+
+func (service *Service) PostStocks(productDTO models.ProductDTO) *models.Product {
+
+	stock := models.Product{}
+	stock.ID = GenerateUUID(8)
+	stock.CreatedAt = time.Now().UTC().Round(time.Second)
+	stock.UpdatedAt = time.Now().UTC().Round(time.Second)
+	stock.ProductName = productDTO.ProductName
+	stock.Description = productDTO.Description
+	stock.Price = productDTO.Price
+	stock.Amount = productDTO.Amount
+
+
+	err := service.Repository.PostStocks(stock)
+	if err != nil {
+		return nil
+	}
+
+	return &stock
 }
 
 func GenerateUUID(length int) string {
