@@ -20,3 +20,15 @@ export const removeProduct = async (id) => {
     const resp = await axios.delete(`http://localhost:3001/stocks/${id}`)
     return resp;
 }
+
+export const changestock = async ({id,productName,description,price,amount}) => {
+   
+    const resp = await axios.put(`http://localhost:3001/stocks/${id}`, {
+        productName: productName,
+        description: description,
+        price: price,
+        amount: amount,
+    })
+    return resp; 
+}
+

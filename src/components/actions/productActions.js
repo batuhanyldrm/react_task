@@ -1,5 +1,5 @@
 import { getProducts, removeProduct } from "../api/productApi";
-import { ADD_PRODUCT, FETCH_PRODUCTS, DELETE_PRODUCT } from "./types";
+import { ADD_PRODUCT, FETCH_PRODUCTS, DELETE_PRODUCT, UPDATE_STOCK } from "./types";
 
 export const fetchProducts = () => async (
     dispatch
@@ -29,4 +29,13 @@ export const deleteProduct = (id) => async (
             type: DELETE_PRODUCT,
             payload: id
         })
+}
+
+export const updateStock = (data) => async (
+    dispatch
+) => {
+    dispatch({
+        type: UPDATE_STOCK,
+        payload: data
+    })
 }
