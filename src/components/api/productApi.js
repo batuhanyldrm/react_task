@@ -5,13 +5,18 @@ export const getProducts = async () => {
     return resp;
 }
 
-export const postProduct = async (data) => {
+export const postProduct = async ({productName,description,price,amount}) => {
    
         const resp = await axios.post("http://localhost:3001/stocks", {
-            productName: data,
-            /* description: data,
-            price: data,
-            amount: data */
+            productName: productName,
+            description: description,
+            price: price,
+            amount: amount,
         })
         return resp; 
+}
+
+export const removeProduct = async (id) => {
+    const resp = await axios.delete(`http://localhost:3001/stocks/${id}`)
+    return resp;
 }

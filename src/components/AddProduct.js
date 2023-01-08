@@ -12,9 +12,18 @@ function AddProduct(props) {
 
     const {open, handleClose, addProduct} = props
 
-    const [product, setProduct] = useState("")
+    const [productName, setProductName] = useState("")
+    const [description, setDescription] = useState("")
+    const [price, setPrice] = useState("")
+    const [amount, setAmount] = useState("")
 
-    const handleCreateProduct = async (data) => {
+    const handleCreateProduct = async () => {
+      const data = {
+        productName : productName,
+        description : description,
+        price: price,
+        amount: amount,
+    }
       await postProduct(data
         ).then((res) => {
         addProduct(res.data)
@@ -37,28 +46,50 @@ function AddProduct(props) {
           </DialogTitle>
           <TextField
             id="product"
-            value={product}  
-            onChange={(e) => setProduct(e.target.value)}
+            value={productName}
+            onChange={(e) => setProductName(e.target.value)}
             type="text"
-            margin="dense"
-            label="Product Name" 
+            margin="normal"
+            label="Product Name"
             variant="outlined"
             size='small'
           />
-         {/*  <TextField
-            value={product}
-            onChange={(e) => setProduct(e.target.value)}
+          <TextField
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             autoFocus
-            margin="dense"
-            id="data"
-            label="Todo"
+            margin="normal"
+            id="description"
+            label="Description"
             type="text"
-            fullWidth
-            variant="standard"
-          /> */}
+            variant="outlined"
+            size='small'
+          />
+          <TextField
+            value={amount}
+            onChange={(e) => setAmount(parseInt(e.target.value))}
+            autoFocus
+            margin="normal"
+            id="amount"
+            label="Amount"
+            type="number"
+            variant="outlined"
+            size='small'
+          />
+          <TextField
+            value={price}
+            onChange={(e) => setPrice(parseInt(e.target.value))}
+            autoFocus
+            margin="normal"
+            id="price"
+            label="Price"
+            type="number"
+            variant="outlined"
+            size='small'
+          />
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={() =>handleCreateProduct(product)}>ADD</Button>
+            <Button onClick={() =>handleCreateProduct()}>ADD</Button>
           </DialogActions>
       </Dialog>
     </div>
@@ -70,7 +101,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   addProduct: (data) => {
-    dispatch(addProduct(data));},
-  });
+    dispatch(addProduct(data));
+  },
+});
 
 export default connect(mapStateToProps, mapDispatchToProps) (AddProduct)

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Button from '@mui/material/Button';
 import AddProduct from './AddProduct';
+import ProductList from './ProductList';
 
 function Product(props) {
 
@@ -20,6 +21,7 @@ function Product(props) {
         <Button variant="contained" color="primary" style={{margin:"5px"}} onClick={() => setOpen(true)}>
             ADD PRODUCT
         </Button>
+        <ProductList/>
     </div>
     );
 }
