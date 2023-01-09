@@ -90,7 +90,7 @@ func (repository *Repository) GetStock(ID string) (models.Product, error) {
 	defer cancel()
 
 	stock := models.Product{}
-	err := collection.FindOne(ctx, bson.M{}).Decode(&stock)
+	err := collection.FindOne(ctx, bson.M{"id": ID}).Decode(&stock)
 
 	if err != nil {
 		log.Fatal(err)

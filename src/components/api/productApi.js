@@ -21,13 +21,13 @@ export const removeProduct = async (id) => {
     return resp;
 }
 
-export const changestock = async ({id,productName,description,price,amount}) => {
+export const changeStock = async (data) => {
    
-    const resp = await axios.put(`http://localhost:3001/stocks/${id}`, {
-        productName: productName,
-        description: description,
-        price: price,
-        amount: amount,
+    const resp = await axios.put(`http://localhost:3001/stocks/${data.id}`, {
+        productName: data.productName,
+        description: data.description,
+        price: data.price,
+        amount: data.amount,
     })
     return resp; 
 }

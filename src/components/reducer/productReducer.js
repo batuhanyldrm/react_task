@@ -9,13 +9,13 @@ const Reducer = (state = {}, action) => {
         case DELETE_PRODUCT:
             return{...state, products: [...state.products].filter((item) => item.id !== action.payload)}
         case UPDATE_STOCK:
-            const temp=[...state];
+            const temp={...state};
             temp.products.map((item, index) => {
                 if(item.id == action.payload.id) {
-                    temp.item[index].productName = action.payload.productName
-                    temp.item[index].description = action.payload.description
-                    temp.item[index].price = action.payload.price
-                    temp.item[index].amount = action.payload.amount
+                    temp.products[index].productName = action.payload.productName
+                    temp.products[index].description = action.payload.description
+                    temp.products[index].price = action.payload.price
+                    temp.products[index].amount = action.payload.amount
                 }
             })
             return{...state, products: temp.products}

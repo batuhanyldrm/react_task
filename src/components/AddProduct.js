@@ -23,16 +23,18 @@ function AddProduct(props) {
         description : description,
         price: price,
         amount: amount,
-    }
+      }
       await postProduct(data
         ).then((res) => {
         addProduct(res.data)
+      }).finally(() => {
+        handleClose(false)
       })
     }
 
     return(
     <div>
-         <Dialog
+        <Dialog
           open={open}
           onClose={handleClose}
           aria-labelledby="alert-dialog-title"
