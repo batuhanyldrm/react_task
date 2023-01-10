@@ -5,6 +5,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import DialogActions from '@mui/material/DialogActions';
 import TextField from '@mui/material/TextField';
+import DialogContent from '@mui/material/DialogContent';
 import { addProduct } from './actions/productActions';
 import { postProduct } from './api/productApi';
 
@@ -46,6 +47,8 @@ function AddProduct(props) {
               Add Stock
             </div>
           </DialogTitle>
+          <DialogContent>
+            <div style={{display:"grid"}}>
           <TextField
             id="product"
             value={productName}
@@ -89,6 +92,8 @@ function AddProduct(props) {
             variant="outlined"
             size='small'
           />
+          </div>
+          </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
             <Button onClick={() =>handleCreateProduct()}>ADD</Button>
