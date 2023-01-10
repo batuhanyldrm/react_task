@@ -84,6 +84,33 @@ func (repository *Repository) GetStocks() ([]models.Product, error) {
 
 }
 
+func (repository *Repository) GetProductsWithQuery(query string) ([]models.Product, error) {
+	collection := repository.client.Database("stock").Collection("stock")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	searchQuery := bson.M{"$text": bson.M{"$search": query}}
+	cur, err := collection.Find(ctx, searchQuery)
+
+	if err != nil {
+		return nil, err
+	}
+
+	stocks := []models.Product{}
+	for cur.Next(ctx) {
+		var stock models.Product
+		err := cur.Decode(&stock)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		stocks = append(stocks, stock)
+	}
+
+	return stocks, nil
+
+}
+
 func (repository *Repository) GetStock(ID string) (models.Product, error) {
 	collection := repository.client.Database("stock").Collection("stock")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)

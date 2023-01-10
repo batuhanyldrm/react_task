@@ -29,6 +29,17 @@ func (service *Service) GetStocks() ([]models.Product, error) {
 	return stocks, nil
 }
 
+func (service *Service) GetSearch(query string) ([]models.Product, error) {
+
+	stocks, err := service.Repository.GetProductsWithQuery(query)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return stocks, nil
+}
+
 func (service *Service) GetStock(ID string) (models.Product, error) {
 
 	stock, err := service.Repository.GetStock(ID)
@@ -38,6 +49,25 @@ func (service *Service) GetStock(ID string) (models.Product, error) {
 	}
 
 	return stock, nil
+}
+
+func (service *Service) UpdateStocksAmount(productDTO models.ProductDTO, ID string) (*models.Product, error) {
+
+	stock, err := service.Repository.GetStock(ID)
+	if err != nil {
+		return nil, err
+	}
+
+	stock.Amount = stock.Amount - productDTO.Amount
+	stock.UpdatedAt = time.Now().UTC().Round(time.Second)
+
+	err = service.Repository.UpdateStocks(stock, ID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &stock, nil
 }
 
 func (service *Service) UpdateStocks(productDTO models.ProductDTO, ID string) (*models.Product, error) {

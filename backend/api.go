@@ -17,11 +17,28 @@ func NewApi(service *Service) Api {
 
 func (api *Api) GetStocksHandler(c *fiber.Ctx) error {
 
-	Stocks, err := api.Service.GetStocks()
+	stocks, err := api.Service.GetStocks()
 
 	switch err {
 	case nil:
-		c.JSON(Stocks)
+		c.JSON(stocks)
+		c.Status(fiber.StatusOK)
+	default:
+		c.Status(fiber.StatusInternalServerError)
+	}
+
+	return nil
+}
+
+func (api *Api) GetSearchHandler(c *fiber.Ctx) error {
+
+	query := c.Query("q")
+
+	stocks, err := api.Service.GetSearch(query)
+
+	switch err {
+	case nil:
+		c.JSON(stocks)
 		c.Status(fiber.StatusOK)
 	default:
 		c.Status(fiber.StatusInternalServerError)
@@ -44,6 +61,29 @@ func (api *Api) GetStockHandler(c *fiber.Ctx) error {
 
 	return nil
 
+}
+
+func (api *Api) UpdateStocksAmountHandler(c *fiber.Ctx) error {
+
+	ID := c.Params("id")
+	stock := models.ProductDTO{}
+	err := c.BodyParser(&stock)
+
+	if err != nil {
+		c.Status(fiber.StatusBadRequest)
+	}
+
+	updatedStock, err := api.Service.UpdateStocksAmount(stock, ID)
+
+	switch err {
+	case nil:
+		c.JSON(updatedStock)
+		c.Status(fiber.StatusOK)
+	default:
+		c.Status(fiber.StatusInternalServerError)
+	}
+
+	return nil
 }
 
 func (api *Api) UpdateStocksHandler(c *fiber.Ctx) error {

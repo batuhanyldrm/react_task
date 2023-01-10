@@ -5,6 +5,14 @@ export const getProducts = async () => {
     return resp;
 }
 
+export const getSearch = async (data) => {
+    const resp = await axios.get(`http://localhost:3001/search?q=${data.id}`, {
+        productName: data.productName,
+        description: data.description
+    })
+    return resp;
+}
+
 export const postProduct = async ({productName,description,price,amount}) => {
    
         const resp = await axios.post("http://localhost:3001/stocks", {
@@ -32,3 +40,9 @@ export const changeStock = async (data) => {
     return resp; 
 }
 
+export const updateProductAmount = async (id, amount) => {
+    const resp = await axios.put(`http://localhost:3001/stocks/${id}/amount`, {
+        amount
+    })
+    return resp;
+}

@@ -21,10 +21,12 @@ func SetupApp(api *Api) *fiber.App {
 	}))
 
 	app.Get("/stocks", api.GetStocksHandler)
+	app.Put("stocks/:id/amount", api.UpdateStocksAmountHandler)
 	app.Get("/stocks/:id", api.GetStockHandler)
 	app.Put("/stocks/:id", api.UpdateStocksHandler)
 	app.Post("/stocks", api.PostStocksHandler)
 	app.Delete("/stocks/:id", api.DeleteStocksHandler)
+	app.Get("/search", api.GetSearchHandler)
 
 	return app
 }

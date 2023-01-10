@@ -1,4 +1,4 @@
-import { ADD_PRODUCT, FETCH_PRODUCTS, DELETE_PRODUCT, UPDATE_STOCK } from "../actions/types";
+import { ADD_PRODUCT, FETCH_PRODUCTS, DELETE_PRODUCT, UPDATE_STOCK, UPDATE_PRODUCT_STOCK, FETCH_SEARCH_PRODUCT } from "../actions/types";
 
 const Reducer = (state = {}, action) => {
     switch (action.type) {
@@ -6,10 +6,12 @@ const Reducer = (state = {}, action) => {
             return {...state, products:  [...state.products, action.payload]};
         case FETCH_PRODUCTS:
             return {...state, products: action.payload}
+        case FETCH_SEARCH_PRODUCT:
+            return {...state, products: action.payload}
         case DELETE_PRODUCT:
             return{...state, products: [...state.products].filter((item) => item.id !== action.payload)}
         case UPDATE_STOCK:
-            const temp={...state};
+            var temp={...state};
             temp.products.map((item, index) => {
                 if(item.id == action.payload.id) {
                     temp.products[index].productName = action.payload.productName
@@ -19,6 +21,14 @@ const Reducer = (state = {}, action) => {
                 }
             })
             return{...state, products: temp.products}
+            case UPDATE_PRODUCT_STOCK:
+                var temp={...state};
+                temp.products.map((item, index) => {
+                    if(item.id == action.payload.id) {
+                        temp.products[index].amount = action.payload.amount
+                    }
+                })
+                return{...state, products: temp.products}
         default:
             return state
     }

@@ -7,16 +7,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { fetchProducts } from './actions/productActions';
 import ProductListItem from './ProductListItem';
 
 function ProductList(props) {
 
-    const {fetchProducts,products} = props;
+    const {products} = props;
 
-    useEffect(() => {
-        fetchProducts()
-      }, [])
 
     return(
     <div>
@@ -33,7 +29,7 @@ function ProductList(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-         {products.products && products.products.map((product, index) => (
+          {products.products && products.products.map((product, index) => (
             <ProductListItem
             product={product}
             index={index}
@@ -48,13 +44,9 @@ function ProductList(props) {
 }
 
 const mapStateToProps = (state) => ({
-    products: state.products
   });
   
   const mapDispatchToProps = (dispatch) => ({
-    fetchProducts: () => {
-      dispatch(fetchProducts());
-    },
   });
 
 export default connect(mapStateToProps,mapDispatchToProps) (ProductList)

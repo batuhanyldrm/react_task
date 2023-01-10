@@ -1,5 +1,5 @@
-import { getProducts, removeProduct } from "../api/productApi";
-import { ADD_PRODUCT, FETCH_PRODUCTS, DELETE_PRODUCT, UPDATE_STOCK } from "./types";
+import { getProducts, removeProduct, updateProductAmount, getSearch } from "../api/productApi";
+import { ADD_PRODUCT, FETCH_PRODUCTS, DELETE_PRODUCT, UPDATE_STOCK, UPDATE_PRODUCT_STOCK, FETCH_SEARCH_PRODUCT } from "./types";
 
 export const fetchProducts = () => async (
     dispatch
@@ -7,6 +7,17 @@ export const fetchProducts = () => async (
     const resp = await getProducts()
         dispatch({
             type: FETCH_PRODUCTS,
+            payload: resp.data
+        })
+    
+}
+
+export const fetchSearchProducts = () => async (
+    dispatch
+) => {
+    const resp = await getSearch()
+        dispatch({
+            type: FETCH_SEARCH_PRODUCT,
             payload: resp.data
         })
     
@@ -38,4 +49,14 @@ export const updateStock = (data) => async (
         type: UPDATE_STOCK,
         payload: data
     })
+}
+
+export const updateProductStock = (data) => async (
+    dispatch
+) => {
+    const resp = await updateProductAmount(data)
+        dispatch({
+            type: UPDATE_PRODUCT_STOCK,
+            payload: data
+        })
 }

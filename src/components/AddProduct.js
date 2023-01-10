@@ -15,8 +15,8 @@ function AddProduct(props) {
 
     const [productName, setProductName] = useState("")
     const [description, setDescription] = useState("")
-    const [price, setPrice] = useState("")
-    const [amount, setAmount] = useState("")
+    const [price, setPrice] = useState(0)
+    const [amount, setAmount] = useState(0)
 
     const handleCreateProduct = async () => {
       const data = {
