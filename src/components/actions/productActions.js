@@ -12,10 +12,10 @@ export const fetchProducts = () => async (
     
 }
 
-export const fetchSearchProducts = () => async (
+export const fetchSearchProducts = (data) => async (
     dispatch
 ) => {
-    const resp = await getSearch()
+    const resp = await getSearch(data)
         dispatch({
             type: FETCH_SEARCH_PRODUCT,
             payload: resp.data
@@ -51,12 +51,11 @@ export const updateStock = (data) => async (
     })
 }
 
-export const updateProductStock = (data) => async (
+export const updateProductStock = (id, amount) => async (
     dispatch
 ) => {
-    const resp = await updateProductAmount(data)
         dispatch({
             type: UPDATE_PRODUCT_STOCK,
-            payload: data
+            payload: {id,amount}
         })
 }

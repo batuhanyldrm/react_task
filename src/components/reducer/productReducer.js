@@ -25,7 +25,7 @@ const Reducer = (state = {}, action) => {
                 var temp={...state};
                 temp.products.map((item, index) => {
                     if(item.id == action.payload.id) {
-                        temp.products[index].amount = action.payload.amount
+                        temp.products[index].amount = item.amount - action.payload.amount
                     }
                 })
                 return{...state, products: temp.products}

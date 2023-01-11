@@ -9,27 +9,32 @@ import DialogContent from '@mui/material/DialogContent';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select, { SelectChangeEvent } from '@mui/material/Select'
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import { updateProductAmount } from './api/productApi';
 import { updateProductStock } from './actions/productActions';
 
 function Order(props) {
 
-    const {products, open, updateProductStock, orderPopUpClose} = props
+    const {products, open, updateProductStock, orderPopUpClose, fetchProducts} = props
 
     const [selectedProduct, setSelectedProduct] = useState({})
     const [amount, setAmount] = useState(0)
+    const [updateAlert, setUpdateAlert] = useState({ open: false, message: "", status: "" })
 
     const handleSave = async () => {
         if (amount > selectedProduct.amount) {
+          setUpdateAlert({ open: true, message: "There are not enough products", status: "error" })
             console.log("hata")
         }
         else{
            await updateProductAmount(selectedProduct.id,amount)
             .then(() => {
                 updateProductStock(selectedProduct.id,amount)
-                console.log(updateProductStock(selectedProduct.id,amount),selectedProduct.id,amount)
+                setUpdateAlert({ open: true, message: "saved succesfully", status: "success" })
             }).finally(() => {
+                fetchProducts()
                 orderPopUpClose(false)
             })
         }
@@ -82,6 +87,16 @@ function Order(props) {
             <Button onClick={orderPopUpClose}>Cancel</Button>
             <Button onClick={() => handleSave()}>Save</Button>
           </DialogActions>
+          <Snackbar
+                open={updateAlert.open}
+                autoHideDuration={3000}
+                style={{zIndex:"1001"}}
+                onClose={() => setUpdateAlert({ open: false, message: "", status: "" })}
+            >
+                <Alert severity={updateAlert.status || "info"}>
+                    {updateAlert.message}
+                </Alert>
+            </Snackbar>
       </Dialog>
     </div>
     );
@@ -91,8 +106,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    updateProductStock: (data) => {
-        dispatch(updateProductStock(data))
+    updateProductStock: (id, amount) => {
+        dispatch(updateProductStock(id, amount))
     },
 });
 

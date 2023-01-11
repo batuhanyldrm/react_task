@@ -11,14 +11,14 @@ import { fetchProducts, fetchSearchProducts } from './actions/productActions';
 
 function Product(props) {
 
-    const {fetchProducts, products} = props;
+    const {fetchProducts, products, fetchSearchProducts} = props;
 
     const [open, setOpen] = useState(false);
     const [order, setOrder] = useState(false);
+    const [search, setSearch] = useState("");
 
     const handleSearch = () => {
-        fetchSearchProducts({productName : products.productName,
-            description : products.description})
+        fetchSearchProducts(search)
     }
 
     useEffect(() => {
@@ -39,6 +39,7 @@ function Product(props) {
             open={order}
             orderPopUpClose={orderPopUpClose}
             products={products}
+            fetchProducts={fetchProducts}
         />
         <AddProduct
             open={open}
@@ -51,22 +52,24 @@ function Product(props) {
         <Button variant="contained" color="primary" style={{margin:"5px"}} onClick={() => setOpen(true)}>
             ADD PRODUCT
         </Button>
-        <TextField 
-        style={{marginTop:"5px"}} 
-        id="outlined-basic" 
-        label="Search" 
-        size='small' 
-        variant="outlined" 
-        InputProps={{
-            endAdornment: (
-                <>
-                <IconButton size="small" onClick={() => handleSearch()}>
-                    <SearchIcon/>
-                </IconButton>
-                </>
-            ),
-        }}
-        />
+             <TextField 
+             style={{marginTop:"5px"}} 
+             id="outlined-basic" 
+             label="Search" 
+             size='small'
+             value={search}
+             onChange={(e) => setSearch(e.target.value)}
+             variant="outlined" 
+             InputProps={{
+                 endAdornment: (
+                     <>
+                     <IconButton size="small" onClick={() => handleSearch()}>
+                         <SearchIcon/>
+                     </IconButton>
+                     </>
+                 ),
+             }}
+             />
         <ProductList
             products={products}
         />
@@ -82,6 +85,9 @@ const mapStateToProps = (state) => ({
     fetchProducts: () => {
       dispatch(fetchProducts());
     },
+    fetchSearchProducts: (data) => {
+        dispatch(fetchSearchProducts(data));
+      },
   });
 
 export default  connect(mapStateToProps,mapDispatchToProps) (Product)

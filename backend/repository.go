@@ -89,7 +89,10 @@ func (repository *Repository) GetProductsWithQuery(query string) ([]models.Produ
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	searchQuery := bson.M{"$text": bson.M{"$search": query}}
+	searchQuery := bson.M{}
+	if query != "" {
+		searchQuery = bson.M{"$text": bson.M{"$search": query}}
+	}
 	cur, err := collection.Find(ctx, searchQuery)
 
 	if err != nil {
