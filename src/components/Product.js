@@ -21,6 +21,12 @@ function Product(props) {
         fetchSearchProducts(search)
     }
 
+    const checkPressedEnter = (key) => {
+        if (key === "Enter") {
+            fetchSearchProducts(search)
+        }
+      };
+
     useEffect(() => {
         fetchProducts()
       }, [])
@@ -59,6 +65,7 @@ function Product(props) {
              size='small'
              value={search}
              onChange={(e) => setSearch(e.target.value)}
+             onKeyPress={(e) => checkPressedEnter(e.key)}
              variant="outlined" 
              InputProps={{
                  endAdornment: (
