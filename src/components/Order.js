@@ -26,7 +26,6 @@ function Order(props) {
     const handleSave = async () => {
         if (amount > selectedProduct.amount) {
           setUpdateAlert({ open: true, message: "There are not enough products", status: "error" })
-            console.log("hata")
         }
         else{
            await updateProductAmount(selectedProduct.id,amount)
@@ -66,7 +65,7 @@ function Order(props) {
                       label="Product Name"
                     >
                     {products.products && products.products.map((product) => {
-                       return <MenuItem value={product.productName} onClick={() => setSelectedProduct(product)}>{product.productName}</MenuItem>
+                       return <MenuItem key={product.id} value={product.productName} onClick={() => setSelectedProduct(product)}>{product.productName}</MenuItem>
                     })}
                     </Select>
                   </FormControl>
