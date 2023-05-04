@@ -39,7 +39,6 @@ function AddProduct(props) {
       setPrice(0)
       setAmount(0)
     }, [products])
-    
 
     return(
     <div>
