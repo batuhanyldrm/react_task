@@ -50,6 +50,7 @@ function Product(props) {
         <AddProduct
             open={open}
             handleClose={handleClose}
+            products={products}
         />
 
         <Button variant="contained" color="primary" style={{margin:"5px"}} onClick={() => setOrder(true)}>
@@ -70,7 +71,7 @@ function Product(props) {
              InputProps={{
                  endAdornment: (
                      <>
-                     <IconButton size="small" onClick={() => handleSearch()}>
+                     <IconButton size="small" onClick={handleSearch}>
                          <SearchIcon/>
                      </IconButton>
                      </>

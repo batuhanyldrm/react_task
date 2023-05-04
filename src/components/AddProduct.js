@@ -11,7 +11,7 @@ import { postProduct } from './api/productApi';
 
 function AddProduct(props) {
 
-    const {open, handleClose, addProduct} = props
+    const {open, handleClose, addProduct, products} = props
 
     const [productName, setProductName] = useState("")
     const [description, setDescription] = useState("")
@@ -32,6 +32,14 @@ function AddProduct(props) {
         handleClose(false)
       })
     }
+
+    useEffect(() => {
+      setProductName("")
+      setDescription("")
+      setPrice(0)
+      setAmount(0)
+    }, [products])
+    
 
     return(
     <div>
@@ -96,7 +104,7 @@ function AddProduct(props) {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={() =>handleCreateProduct()}>ADD</Button>
+            <Button onClick={handleCreateProduct}>ADD</Button>
           </DialogActions>
       </Dialog>
     </div>

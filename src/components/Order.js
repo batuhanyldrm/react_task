@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -39,6 +39,11 @@ function Order(props) {
         }
     }
 
+    useEffect(() => {
+      setSelectedProduct({})
+      setAmount(0)
+    }, [products])
+    
 
     return(
     <div>
@@ -84,7 +89,7 @@ function Order(props) {
           </DialogContent>
           <DialogActions>
             <Button onClick={orderPopUpClose}>Cancel</Button>
-            <Button onClick={() => handleSave()}>Save</Button>
+            <Button onClick={handleSave}>Save</Button>
           </DialogActions>
           <Snackbar
                 open={updateAlert.open}

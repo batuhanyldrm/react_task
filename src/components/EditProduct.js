@@ -97,7 +97,7 @@ function EditProduct(props) {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={() =>handleChageStock()}>EDIT</Button>
+            <Button onClick={handleChageStock}>EDIT</Button>
           </DialogActions>
       </Dialog>
         </>
