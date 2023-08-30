@@ -3,7 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strconv"
 	"testing"
@@ -56,7 +56,7 @@ func TestGetProducts(t *testing.T) {
 
 			Convey("Then the request should return all products", func() {
 				actualResult := []models.Product{}
-				actualResponseBody, _ := ioutil.ReadAll(resp.Body)
+				actualResponseBody, _ := io.ReadAll(resp.Body)
 				err := json.Unmarshal(actualResponseBody, &actualResult)
 
 				So(err, ShouldBeNil)
@@ -113,7 +113,7 @@ func TestGetProduct(t *testing.T) {
 
 			Convey("Then product should be returned", func() {
 				actualResult := models.Product{}
-				actualRespBody, _ := ioutil.ReadAll(resp.Body)
+				actualRespBody, _ := io.ReadAll(resp.Body)
 				err := json.Unmarshal(actualRespBody, &actualResult)
 
 				So(err, ShouldBeNil)
@@ -175,7 +175,7 @@ func TestUpdateProduct(t *testing.T) {
 
 			Convey("Then product stock should be updated", func() {
 				actualResult := models.Product{}
-				actualRespBody, _ := ioutil.ReadAll(resp.Body)
+				actualRespBody, _ := io.ReadAll(resp.Body)
 				err = json.Unmarshal(actualRespBody, &actualResult)
 				So(err, ShouldBeNil)
 				So(actualResult.ID, ShouldEqual, stock.ID)
